@@ -3,9 +3,7 @@
     "name": "nokia_wellbeing_app",
     "slug": "nokia_wellbeing_app",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "assetBundlePatterns": ["**/*"]
   },
   "name": "nokia_wellbeing_app"
 }
