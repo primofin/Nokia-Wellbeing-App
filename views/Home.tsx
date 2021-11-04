@@ -9,7 +9,9 @@ const Home = ({ navigation }) => {
   return (
     <View>
       <Heading style={globalStyles.heading}>Welcome back!</Heading>
-      <Button style={globalStyles.button} onPress={() => console.log('hello world')}>
+      <Button style={globalStyles.button} onPress={() => {
+        navigation.navigate('Questionnaire')
+      }}>
         <Text style={globalStyles.mainBtnText}>Wellbeing Questionnaire</Text>
         <Text style={globalStyles.mainBtnTextSmall}>How are you feeling today?</Text>
       </Button>

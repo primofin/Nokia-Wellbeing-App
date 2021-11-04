@@ -7,7 +7,8 @@ import ContactPage from '../views/ContactPage'
 import CloseFormModal from '../modals/CloseFormModal'
 import FormSubmittedModal from '../modals/FormSubmittedModal'
 import NotificationSettings from '../views/NotificationSettings'
-import PersonalPage from '../views/PersonalPage';
+import PersonalPage from '../views/PersonalPage'
+import Questionnaire from '../views/Questionnaire'
 
 const Stack = createNativeStackNavigator()
 
@@ -16,6 +17,7 @@ function Navigator() {
     <Stack.Navigator>
       <Stack.Group>
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Questionnaire" component={Questionnaire} />
         <Stack.Screen name="Contact Page" component={ContactPage} />
         <Stack.Screen name="My Wellbeing" component={PersonalPage} />
         <Stack.Screen name="Notifications" component={NotificationSettings} />
