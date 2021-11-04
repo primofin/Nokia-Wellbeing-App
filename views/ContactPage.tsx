@@ -70,7 +70,7 @@ const ContactPage = ({ navigation }) => {
             By email
           </Radio>
         </Radio.Group>
-        <Button onPress={() => console.log('hello world')}>Submit</Button>
+        <Button onPress={() => navigation.navigate('FormSubmittedModal')}>Submit</Button>
       </VStack>
     </>
   )

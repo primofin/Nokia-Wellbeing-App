@@ -5,7 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import Home from '../views/Home'
 import ContactPage from '../views/ContactPage'
-import CloseFormModal from '../modals/CloseFormModal';
+import CloseFormModal from '../modals/CloseFormModal'
+import FormSubmittedModal from '../modals/FormSubmittedModal'
 
 const Stack = createNativeStackNavigator()
 
@@ -18,6 +19,7 @@ function Navigator() {
       </Stack.Group>
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="CloseFormModal" component={CloseFormModal} />
+        <Stack.Screen name="FormSubmittedModal" component={FormSubmittedModal} />
       </Stack.Group>
     </Stack.Navigator>
   </NavigationContainer>

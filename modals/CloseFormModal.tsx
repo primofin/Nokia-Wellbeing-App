@@ -1,11 +1,6 @@
 import React from 'react'
 import {
   Heading,
-  Input,
-  FormControl,
-  VStack,
-  TextArea,
-  Radio,
   View,
   HStack,
   Button
