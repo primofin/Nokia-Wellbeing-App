@@ -21,7 +21,9 @@ const Home = ({ navigation }) => {
         <Text style={globalStyles.mainBtnText}>Contact assistance</Text>
         <Text style={globalStyles.mainBtnTextSmall}>Need to talk or ask for help?</Text>
       </Button>
-      <Button style={globalStyles.button} onPress={() => console.log('hello world')}>
+      <Button style={globalStyles.button} onPress={() => {
+        navigation.navigate('My Wellbeing')
+      }}>
         <Text style={globalStyles.mainBtnText}>My wellbeing</Text>
         <Text style={globalStyles.mainBtnTextSmall}>How have you been lately?</Text>
       </Button>
