@@ -1,4 +1,5 @@
 import React from 'react'
+import { StyleSheet } from 'react-native';
 import {
   Heading,
   Input,
@@ -7,15 +8,20 @@ import {
   TextArea,
   Button,
   Radio,
+  View
 } from 'native-base'
 
-const ContactPage = () => {
+const ContactPage = ({ navigation }) => {
   const [formData, setData] = React.useState({})
   const [value, setValue] = React.useState('one')
 
   return (
     <>
-      <Heading size="xl">Contact assistance</Heading>
+      <View style={styles.header}>
+        <Heading>Contact assistance</Heading>
+        <Button onPress={() => navigation.navigate('CloseFormModal')}
+        >X</Button>
+      </View>
       <VStack width="90%" mx="3">
         <FormControl isRequired>
           <FormControl.Label _text={{ bold: true }}>Name</FormControl.Label>
@@ -69,5 +75,14 @@ const ContactPage = () => {
     </>
   )
 }
+
+const styles = StyleSheet.create({
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  }
+
+})
 
 export default ContactPage
