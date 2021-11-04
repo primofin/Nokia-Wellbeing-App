@@ -1,9 +1,10 @@
 import React from 'react'
 import { Heading, Button, Text } from 'native-base'
+import globalStyles from '../styles/global'
 
 const ContactPage = () => {
   return (
-    <Heading size="xl">Contact assistance</Heading>
+    <Heading style={globalStyles.heading}>Contact assistance</Heading>
   )
 }
 
