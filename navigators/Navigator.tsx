@@ -7,6 +7,7 @@ import Home from '../views/Home'
 import ContactPage from '../views/ContactPage'
 import CloseFormModal from '../modals/CloseFormModal'
 import FormSubmittedModal from '../modals/FormSubmittedModal'
+import NotificationSettings from '../views/NotificationSettings'
 
 const Stack = createNativeStackNavigator()
 
@@ -16,10 +17,12 @@ function Navigator() {
       <Stack.Group>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Contact Page" component={ContactPage} />
+        <Stack.Screen name="Notifications" component={NotificationSettings} />
       </Stack.Group>
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="CloseFormModal" component={CloseFormModal} />
-        <Stack.Screen name="FormSubmittedModal" component={FormSubmittedModal} />
+        <Stack.Screen name="CloseForm Modal" options={{ title: '' }} component={CloseFormModal} />
+        <Stack.Screen name="FormSubmitted Modal" options={{ title: '' }}
+          component={FormSubmittedModal} />
       </Stack.Group>
     </Stack.Navigator>
   </NavigationContainer>

@@ -19,7 +19,7 @@ const ContactPage = ({ navigation }) => {
     <>
       <View style={styles.header}>
         <Heading>Contact assistance</Heading>
-        <Button onPress={() => navigation.navigate('CloseFormModal')}
+        <Button onPress={() => navigation.navigate('CloseForm Modal')}
         >X</Button>
       </View>
       <VStack width="90%" mx="3">
@@ -70,7 +70,7 @@ const ContactPage = ({ navigation }) => {
             By email
           </Radio>
         </Radio.Group>
-        <Button onPress={() => navigation.navigate('FormSubmittedModal')}>Submit</Button>
+        <Button onPress={() => navigation.navigate('Notifications')}>Submit</Button>
       </VStack>
     </>
   )

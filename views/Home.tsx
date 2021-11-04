@@ -1,6 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
 import { Heading, Button, Text } from 'native-base'
+
 import globalStyles from '../styles/global.js'
 
 
@@ -24,7 +25,9 @@ const Home = ({ navigation }) => {
         <Text style={globalStyles.mainBtnText}>My wellbeing</Text>
         <Text style={globalStyles.mainBtnTextSmall}>How have you been lately?</Text>
       </Button>
-      <Button style={globalStyles.button} onPress={() => console.log('hello world')}>
+      <Button style={globalStyles.button} onPress={() => {
+        navigation.navigate('Notifications')
+      }}>
         <Text style={globalStyles.mainBtnText}>Notification settings</Text>
         <Text style={globalStyles.mainBtnTextSmall}>Want notifications?</Text>
       </Button>
