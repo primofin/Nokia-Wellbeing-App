@@ -16,7 +16,7 @@ function Navigator() {
   return <NavigationContainer>
     <Stack.Navigator>
       <Stack.Group>
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Home" options={{ title: '' }} component={Home} />
         <Stack.Screen name="Questionnaire" component={Questionnaire} />
         <Stack.Screen name="Contact Page" component={ContactPage} />
         <Stack.Screen name="My Wellbeing" component={PersonalPage} />

@@ -39,9 +39,7 @@ const Questionnaire = () => {
           </View>
         </Radio.Group>
         <FormControl isRequired>
-          <FormControl.Label _text={{ bold: true }}>
-            Feel free to tell us more
-          </FormControl.Label>
+          <FormControl.Label>Feel free to tell us more</FormControl.Label>
           <TextArea
             h={20}
             placeholder="Anything you'd like us to know :) "
