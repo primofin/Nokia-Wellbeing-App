@@ -19,7 +19,7 @@ function Navigator() {
         <Stack.Screen name="Home" options={{ title: '' }} component={Home} />
         <Stack.Screen name="Questionnaire" component={Questionnaire} />
         <Stack.Screen name="Contact Page" component={ContactPage} />
-        <Stack.Screen name="My Wellbeing" component={PersonalPage} />
+        <Stack.Screen name="My Wellbeing" options={{ title: 'My Well-being' }} component={PersonalPage} />
         <Stack.Screen name="Notifications" component={NotificationSettings} />
       </Stack.Group>
       <Stack.Group screenOptions={{ presentation: 'modal' }}>

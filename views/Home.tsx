@@ -12,7 +12,7 @@ const Home = ({ navigation }) => {
       <Button style={globalStyles.button} onPress={() => {
         navigation.navigate('Questionnaire')
       }}>
-        <Text style={globalStyles.mainBtnText}>Wellbeing Questionnaire</Text>
+        <Text style={globalStyles.mainBtnText}>Well-being Questionnaire</Text>
         <Text style={globalStyles.mainBtnTextSmall}>How are you feeling today?</Text>
       </Button>
       <Button style={globalStyles.button}
@@ -26,7 +26,7 @@ const Home = ({ navigation }) => {
       <Button style={globalStyles.button} onPress={() => {
         navigation.navigate('My Wellbeing')
       }}>
-        <Text style={globalStyles.mainBtnText}>My wellbeing</Text>
+        <Text style={globalStyles.mainBtnText}>My Well-being</Text>
         <Text style={globalStyles.mainBtnTextSmall}>How have you been lately?</Text>
       </Button>
       <Button style={globalStyles.button} onPress={() => {

@@ -14,7 +14,7 @@ const NotificationSettings = () => {
           <Switch size="sm" />
         </Flex>
         <Flex direction="row" style={styles.buttonContainer}>
-          <Text>Wellbeing questionnaire reminder</Text>
+          <Text>Well-being questionnaire reminder</Text>
           <Switch size="sm" />
         </Flex>
       </VStack>
