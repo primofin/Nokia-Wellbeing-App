@@ -9,7 +9,7 @@ const PersonalPage = () => {
       <LineChart
         style={{ height: 200 }}
         data={data}
-        svg={{ stroke: 'rgba(18, 65, 145, 1)' }}
+        svg={{ stroke: '#14479f' }}
         contentInset={{ top: 20, bottom: 20 }}
       >
         <Grid />

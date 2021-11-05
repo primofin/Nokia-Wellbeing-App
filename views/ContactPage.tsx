@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native'
 import {
   Heading,
   Input,
@@ -8,19 +8,22 @@ import {
   TextArea,
   Button,
   Radio,
-  View
+  View,
+  CloseIcon
 } from 'native-base'
+
+import ThemeProvider from '../context/ThemeProvider'
 
 const ContactPage = ({ navigation }) => {
   const [formData, setData] = React.useState({})
   const [value, setValue] = React.useState('one')
 
   return (
-    <>
+    <ThemeProvider>
       <View style={styles.header}>
         <Heading>Contact assistance</Heading>
-        <Button onPress={() => navigation.navigate('CloseForm Modal')}
-        >X</Button>
+        <Button bg="transparent" onPress={() => navigation.navigate('CloseForm Modal')}
+        ><CloseIcon size="4" /></Button>
       </View>
       <VStack width="90%" mx="3">
         <FormControl isRequired>
@@ -70,9 +73,9 @@ const ContactPage = ({ navigation }) => {
             By email
           </Radio>
         </Radio.Group>
-        <Button onPress={() => navigation.navigate('Notifications')}>Submit</Button>
+        <Button bg="primary.600" onPress={() => navigation.navigate('FormSubmitted Modal')}>Submit</Button>
       </VStack>
-    </>
+    </ThemeProvider>
   )
 }
 
@@ -82,7 +85,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   }
-
 })
 
 export default ContactPage
