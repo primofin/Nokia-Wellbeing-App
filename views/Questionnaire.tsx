@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import {
+  FlatList,
   FormControl,
   Heading,
   Radio,
@@ -11,48 +12,88 @@ import {
 } from 'native-base'
 
 import ThemeProvider from '../context/ThemeProvider'
+import { db } from '../environment/config'
+import { Question } from '../types'
+
+const data = [
+  {
+    question: 'How are you?'
+  },
+  {
+    question: 'Are you feeling weel?'
+  },
+  {
+    question: 'Did you sleep well'
+  },
+  {
+    question: 'Is your back hurt?'
+  },
+  {
+    question: 'How would you rate your stress levels at work?'
+  },
+  {
+    question: 'How would you describe your work-life balance? '
+  }
+]
 
 const Questionnaire = () => {
-  const [value, setValue] = React.useState('one')
+  const [value, setValue] = useState('one')
+  const [questions, setQuestions] = useState<any>([])
+  const fetchBlogs = async () => {
+    const response = db.collection('questions');
+    const data = await response.get();
+    data.docs.forEach(item => {
+      setQuestions([...questions, item.data()])
+    })
+  }
+
+  useEffect(() => {
+    fetchBlogs();
+  }, [])
 
   return (
     <ThemeProvider>
       <View style={styles.viewWrapper}>
-        <VStack width="90%" mx="3">
-          <Heading>What is your wellbeing {'\n'}just now?</Heading>
-          <Radio.Group
-            name="questionnaireGroup"
-            accessibilityLabel="questionnaire group"
-            value={value}
-            onChange={nextValue => {
-              setValue(nextValue)
-            }}
-            style={styles.radioButtonContainer}
-          >
-            <View style={styles.radioButton}>
-              <Radio value="one" />
-              <Text>Very {'\n'}bad</Text>
-            </View>
-            <Radio value="two" my={1} />
-            <Radio value="three" my={1} />
-            <Radio value="four" my={1} />
-            <View style={styles.radioButton}>
-              <Radio value="five" />
-              <Text>Very {'\n'}good</Text>
-            </View>
-          </Radio.Group>
-          <FormControl isRequired style={styles.textAreaContainer}>
-            <FormControl.Label>Feel free to tell us more</FormControl.Label>
-            <TextArea
-              h={20}
-              placeholder="Anything you'd like us to know :) "
-              w={{
-                base: '100%',
-                md: '25%',
-              }}
-            />
-          </FormControl>
-        </VStack>
+        <FlatList
+          data={data}
+          renderItem={({ item }) => (
+            <VStack width="90%" mx="3" mb="10">
+              {/* <Heading>What is your wellbeing {'\n'}just now?</Heading> */}
+              <Heading>{item.question}</Heading>
+              <Radio.Group
+                name="questionnaireGroup"
+                accessibilityLabel="questionnaire group"
+                value={value}
+                onChange={nextValue => {
+                  setValue(nextValue)
+                }}
+                style={styles.radioButtonContainer}
+              >
+                <View style={styles.radioButton}>
+                  <Radio value="one" />
+                  <Text>Very {'\n'}bad</Text>
+                </View>
+                <Radio value="two" my={1} />
+                <Radio value="three" my={1} />
+                <Radio value="four" my={1} />
+                <View style={styles.radioButton}>
+                  <Radio value="five" />
+                  <Text>Very {'\n'}good</Text>
+                </View>
+              </Radio.Group>
+              <FormControl isRequired style={styles.textAreaContainer}>
+                <FormControl.Label>Feel free to tell us more</FormControl.Label>
+                <TextArea
+                  h={20}
+                  placeholder="Anything you'd like us to know :) "
+                  w={{
+                    base: '100%',
+                    md: '25%',
+                  }}
+                />
+              </FormControl>
+            </VStack>)}
+        />
       </View>
     </ThemeProvider>
   )
