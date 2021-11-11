@@ -1,7 +1,0 @@
-name: Nokia Well-being CI/CD 
-
-on:
-  pull_request:
-    branches:
-      - develop
-      - master
