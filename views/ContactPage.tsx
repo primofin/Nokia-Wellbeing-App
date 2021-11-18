@@ -12,11 +12,31 @@ import {
   CloseIcon
 } from 'native-base'
 
+import { db } from '../environment/config'
 import ThemeProvider from '../context/ThemeProvider'
 
 const ContactPage = ({ navigation }) => {
-  const [formData, setData] = React.useState({})
-  const [value, setValue] = React.useState('one')
+  const [value, setValue] = React.useState('phone')
+  const [formData, setData] = React.useState({
+    name: "",
+    phone: null,
+    email: "",
+    detailed_info: "",
+    contact_by: value
+  })
+
+
+  const onSubmit = (e: any) => {
+    e.preventDefault()
+    db.collection("users").add(formData)
+      .then((docRef: any) => {
+        console.log('submit success')
+      })
+      .catch((error: any) => {
+        console.error("Error adding document: ", error);
+      });
+  }
+
 
   return (
     <ThemeProvider>
@@ -38,19 +58,20 @@ const ContactPage = ({ navigation }) => {
             <FormControl.Label _text={{ bold: true }}>Phone</FormControl.Label>
             <Input
               placeholder="Enter your phone number"
-              onChangeText={value => setData({ ...formData, name: value })}
+              onChangeText={value => setData({ ...formData, phone: value })}
             />
           </FormControl>
           <FormControl isRequired>
             <FormControl.Label _text={{ bold: true }}>Email</FormControl.Label>
             <Input
               placeholder="Enter your email address"
-              onChangeText={value => setData({ ...formData, name: value })}
+              onChangeText={value => setData({ ...formData, email: value })}
             />
           </FormControl>
           <FormControl isRequired>
             <FormControl.Label _text={{ bold: true }}>Feel free to tell us more</FormControl.Label>
             <TextArea
+              onChange={(e: any) => setData({ ...formData, detailed_info: e.currentTarget.value })}
               h={20}
               placeholder="How are you doing?"
               w={{
@@ -64,17 +85,18 @@ const ContactPage = ({ navigation }) => {
             accessibilityLabel="favorite number"
             value={value}
             onChange={nextValue => {
-              setValue(nextValue)
+              setValue(value)
+              setData({ ...formData, contact_by: nextValue })
             }}
           >
-            <Radio value="one" my={1}>
+            <Radio value="phone" my={1}>
               By Phone
             </Radio>
-            <Radio value="two" my={1}>
+            <Radio value="email" my={1}>
               By email
             </Radio>
           </Radio.Group>
-          <Button style={styles.submitButton} bg="primary.600" onPress={() => navigation.navigate('FormSubmitted Modal')}>Submit</Button>
+          <Button style={styles.submitButton} bg="primary.600" onPress={onSubmit}>Submit</Button>
         </VStack>
       </VStack>
     </ThemeProvider>
