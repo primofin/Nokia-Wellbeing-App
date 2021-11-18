@@ -39,26 +39,27 @@ const data = [
 const Questionnaire = () => {
   const [value, setValue] = useState('one')
   const [questions, setQuestions] = useState<any>([])
-  const fetchBlogs = async () => {
+  const fetchQuestions = async () => {
     const response = db.collection('questions');
     const data = await response.get();
     data.docs.forEach(item => {
-      setQuestions([...questions, item.data()])
+      const question = item.data();
+      setQuestions((questions: Question[]) => [...questions, question])
     })
   }
 
+  console.log('questions', questions)
   useEffect(() => {
-    fetchBlogs();
+    fetchQuestions();
   }, [])
 
   return (
     <ThemeProvider>
       <View style={styles.viewWrapper}>
-        <FlatList
-          data={data}
+        {questions && <FlatList
+          data={questions}
           renderItem={({ item }) => (
             <VStack width="90%" mx="3" mb="10">
-              {/* <Heading>What is your wellbeing {'\n'}just now?</Heading> */}
               <Heading>{item.question}</Heading>
               <Radio.Group
                 name="questionnaireGroup"
@@ -93,7 +94,7 @@ const Questionnaire = () => {
                 />
               </FormControl>
             </VStack>)}
-        />
+        />}
       </View>
     </ThemeProvider>
   )
