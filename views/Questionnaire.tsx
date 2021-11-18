@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import {
+  Button,
   FlatList,
   FormControl,
   Heading,
@@ -15,40 +16,98 @@ import ThemeProvider from '../context/ThemeProvider'
 import { db } from '../environment/config'
 import { Question } from '../types'
 
-const data = [
-  {
-    question: 'How are you?'
-  },
-  {
-    question: 'Are you feeling weel?'
-  },
-  {
-    question: 'Did you sleep well'
-  },
-  {
-    question: 'Is your back hurt?'
-  },
-  {
-    question: 'How would you rate your stress levels at work?'
-  },
-  {
-    question: 'How would you describe your work-life balance? '
-  }
-]
-
 const Questionnaire = () => {
-  const [value, setValue] = useState('one')
-  const [questions, setQuestions] = useState<any>([])
+  const [questions, setQuestions] = useState<any>([{
+    id: 'ad32',
+    question: 'How are you today?',
+    weight: 1,
+  }])
+  const [submitValues, setSubmitValues] = useState([{
+    id: '1a',
+    question: 'How are you today?',
+    weight: 1,
+    answer: 'very good',
+    additionalInfo: 'none'
+  }])
+
+  /**
+   * Fetch data (collection: questions) from Firestore
+   */
   const fetchQuestions = async () => {
     const response = db.collection('questions');
     const data = await response.get();
     data.docs.forEach(item => {
-      const question = item.data();
+      let question = item.data();
+      question = { ...question, id: item.id }
+      console.log('item', item.id)
       setQuestions((questions: Question[]) => [...questions, question])
     })
   }
 
-  console.log('questions', questions)
+  const submitAnswers = (e: any) => {
+    e.preventDefault()
+    db.collection("surveys").add({ data: [...submitValues] })
+      .then((docRef) => {
+        console.log('submit success')
+      })
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+      });
+  }
+
+  const onSubmit = (e: any) => {
+    submitAnswers(e)
+  };
+
+  const handleChangeTextarea = (e: any, question: Question) => {
+    let updatedVal = submitValues.find(val => val.id === question.id)
+    if (updatedVal) {
+      updatedVal = { ...updatedVal, additionalInfo: e.currentTarget.value }
+      setSubmitValues([...submitValues, updatedVal])
+    } else {
+      setSubmitValues([...submitValues, {
+        id: question.id,
+        question: question.question,
+        weight: question.weight,
+        answer: '',
+        additionalInfo: e.currentTarget.value
+      }])
+    }
+  }
+
+  const getTextareapValue = (id: string) => {
+    let updatedVal = submitValues.find(val => val.id === id)
+    if (updatedVal) {
+      return updatedVal?.additionalInfo
+    }
+    return ""
+  }
+
+  const getRadioGroupValue = (id: string) => {
+    let updatedVal = submitValues.find(val => val.id === id)
+    if (updatedVal) {
+      return updatedVal?.answer
+    }
+    return "very good"
+  }
+
+  const handleChangeRadioGroup = (value: string, question: Question) => {
+    let updatedVal = submitValues.find(val => val.id === question.id)
+    if (updatedVal) {
+      updatedVal = { ...updatedVal, answer: value }
+      setSubmitValues([...submitValues, updatedVal])
+    } else {
+      setSubmitValues([...submitValues, {
+        id: question.id,
+        question: question.question,
+        weight: question.weight,
+        answer: value,
+        additionalInfo: ''
+      }])
+    }
+  }
+
+
   useEffect(() => {
     fetchQuestions();
   }, [])
@@ -62,29 +121,32 @@ const Questionnaire = () => {
             <VStack width="90%" mx="3" mb="10">
               <Heading>{item.question}</Heading>
               <Radio.Group
+                defaultValue="five"
                 name="questionnaireGroup"
                 accessibilityLabel="questionnaire group"
-                value={value}
+                value={getRadioGroupValue(item.id)}
                 onChange={nextValue => {
-                  setValue(nextValue)
+                  handleChangeRadioGroup(nextValue, item)
                 }}
                 style={styles.radioButtonContainer}
               >
                 <View style={styles.radioButton}>
-                  <Radio value="one" />
+                  <Radio value="very bad" />
                   <Text>Very {'\n'}bad</Text>
                 </View>
-                <Radio value="two" my={1} />
-                <Radio value="three" my={1} />
-                <Radio value="four" my={1} />
+                <Radio value="bad" my={1} />
+                <Radio value="neutral" my={1} />
+                <Radio value="good" my={1} />
                 <View style={styles.radioButton}>
-                  <Radio value="five" />
+                  <Radio value="very good" />
                   <Text>Very {'\n'}good</Text>
                 </View>
               </Radio.Group>
               <FormControl isRequired style={styles.textAreaContainer}>
                 <FormControl.Label>Feel free to tell us more</FormControl.Label>
                 <TextArea
+                  value={getTextareapValue(item.id)}
+                  onChange={e => handleChangeTextarea(e, item)}
                   h={20}
                   placeholder="Anything you'd like us to know :) "
                   w={{
@@ -93,6 +155,9 @@ const Questionnaire = () => {
                   }}
                 />
               </FormControl>
+              <Button onPress={onSubmit} mt="5" colorScheme="cyan">
+                Submit
+              </Button>
             </VStack>)}
         />}
       </View>
