@@ -58,7 +58,7 @@
   },
   "private": true,
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": [
+    "**/**/*.{ts,tsx}": [
       "npm run lint"
     ]
   },
