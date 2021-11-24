@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import uuid from 'react-native-uuid'
 import {
   Heading,
   Input,
@@ -9,7 +11,7 @@ import {
   Button,
   Radio,
   View,
-  CloseIcon
+  CloseIcon,
 } from 'native-base'
 
 import { db } from '../environment/config'
@@ -18,33 +20,47 @@ import ThemeProvider from '../context/ThemeProvider'
 const ContactPage = ({ navigation }: any) => {
   const [value, setValue] = React.useState('phone')
   const [formData, setData] = React.useState({
-    name: "",
-    phone: "",
-    email: "",
-    detailed_info: "",
-    contact_by: value
+    name: '',
+    phone: '',
+    email: '',
+    detailed_info: '',
+    contact_by: value,
+    id: uuid.v4() as string,
   })
 
+  useEffect(() => {
+    _retrieveData()
+  }, [formData.id])
 
-  const onSubmit = (e: any) => {
+  const _retrieveData = async () => {
+    const userId = await AsyncStorage.getItem('userId')
+    console.log('userId', userId)
+  }
+
+  const onSubmit = async (e: any) => {
     e.preventDefault()
-    db.collection("users").add(formData)
+    await AsyncStorage.setItem('userId', formData.id)
+    db.collection('users')
+      .add(formData)
       .then((docRef: any) => {
         console.log('submit success')
       })
       .catch((error: any) => {
-        console.error("Error adding document: ", error);
-      });
+        console.error('Error adding document: ', error)
+      })
   }
-
 
   return (
     <ThemeProvider>
       <VStack style={styles.viewWrapper}>
         <View style={styles.header}>
           <Heading>Contact assistance</Heading>
-          <Button bg="transparent" onPress={() => navigation.navigate('CloseForm Modal')}
-          ><CloseIcon size="4" /></Button>
+          <Button
+            bg="transparent"
+            onPress={() => navigation.navigate('CloseForm Modal')}
+          >
+            <CloseIcon size="4" />
+          </Button>
         </View>
         <VStack width="90%" mx="3">
           <FormControl isRequired>
@@ -69,9 +85,13 @@ const ContactPage = ({ navigation }: any) => {
             />
           </FormControl>
           <FormControl isRequired>
-            <FormControl.Label _text={{ bold: true }}>Feel free to tell us more</FormControl.Label>
+            <FormControl.Label _text={{ bold: true }}>
+              Feel free to tell us more
+            </FormControl.Label>
             <TextArea
-              onChange={(e: any) => setData({ ...formData, detailed_info: e.currentTarget.value })}
+              onChange={(e: any) =>
+                setData({ ...formData, detailed_info: e.currentTarget.value })
+              }
               h={20}
               placeholder="How are you doing?"
               w={{
@@ -96,7 +116,13 @@ const ContactPage = ({ navigation }: any) => {
               By email
             </Radio>
           </Radio.Group>
-          <Button style={styles.submitButton} bg="primary.600" onPress={onSubmit}>Submit</Button>
+          <Button
+            style={styles.submitButton}
+            bg="primary.600"
+            onPress={onSubmit}
+          >
+            Submit
+          </Button>
         </VStack>
       </VStack>
     </ThemeProvider>
@@ -121,7 +147,7 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
     borderRadius: 15,
-  }
+  },
 })
 
 export default ContactPage
