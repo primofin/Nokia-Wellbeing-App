@@ -15,11 +15,11 @@ import {
 import { db } from '../environment/config'
 import ThemeProvider from '../context/ThemeProvider'
 
-const ContactPage = ({ navigation }) => {
+const ContactPage = ({ navigation }: any) => {
   const [value, setValue] = React.useState('phone')
   const [formData, setData] = React.useState({
     name: "",
-    phone: null,
+    phone: "",
     email: "",
     detailed_info: "",
     contact_by: value

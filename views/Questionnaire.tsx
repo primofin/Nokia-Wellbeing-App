@@ -76,7 +76,7 @@ const Questionnaire = () => {
   }
 
   const getTextareapValue = (id: string) => {
-    let updatedVal = submitValues.find(val => val.id === id)
+    const updatedVal = submitValues.find(val => val.id === id)
     if (updatedVal) {
       return updatedVal?.additionalInfo
     }
@@ -84,7 +84,7 @@ const Questionnaire = () => {
   }
 
   const getRadioGroupValue = (id: string) => {
-    let updatedVal = submitValues.find(val => val.id === id)
+    const updatedVal = submitValues.find(val => val.id === id)
     if (updatedVal) {
       return updatedVal?.answer
     }
