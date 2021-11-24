@@ -5,8 +5,7 @@
     "ios": "react-native run-ios",
     "web": "expo start --web",
     "start": "expo start",
-    "lint": "eslint **/**/*.{ts,tsx}",
-    "prepare": "husky install"
+    "lint": "eslint **/**/*.{ts,tsx}"
   },
   "dependencies": {
     "@react-navigation/native": "^6.0.6",
@@ -59,9 +58,14 @@
   },
   "private": true,
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": [
+    "**/**/*.{ts,tsx}": [
       "npm run lint",
       "git add"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
