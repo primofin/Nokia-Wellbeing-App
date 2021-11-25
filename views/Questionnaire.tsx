@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { GestureResponderEvent, StyleSheet } from 'react-native'
+import { GestureResponderEvent, StyleSheet, FlatList } from 'react-native'
 import {
   Button,
-  FlatList,
   FormControl,
   Heading,
   Radio,
@@ -11,6 +10,7 @@ import {
   TextArea,
   View,
   VStack,
+  ScrollView,
 } from 'native-base'
 
 import ThemeProvider from '../context/ThemeProvider'
@@ -30,7 +30,6 @@ const Questionnaire = () => {
     data.docs.forEach(item => {
       let question = item.data()
       question = { ...question, id: item.id }
-      console.log('item', item.id)
       setQuestions((questions: Question[]) => [...questions, question])
     })
   }
@@ -47,10 +46,10 @@ const Questionnaire = () => {
       })
   }
 
-  const handleChangeTextarea = (e: any, question: Question) => {
+  const handleChangeTextarea = (text: string, question: Question) => {
     let updatedVal = submitValues.find((val: Answer) => val.id === question.id)
     if (updatedVal) {
-      updatedVal = { ...updatedVal, additionalInfo: e.currentTarget.value }
+      updatedVal = { ...updatedVal, additionalInfo: text }
       setSubmitValues([...submitValues, updatedVal])
     } else {
       setSubmitValues([
@@ -59,14 +58,15 @@ const Questionnaire = () => {
           id: question.id,
           question: question.question,
           weight: question.weight,
-          answer: '',
-          additionalInfo: e.currentTarget.value,
+          answer: 'Very good',
+          additionalInfo: text,
         },
       ])
     }
+    console.log('e.currentTarget.value', text)
   }
 
-  const getTextareapValue = (id: string) => {
+  const getTextareaValue = (id: string) => {
     const updatedVal = submitValues.find((val: Answer) => val.id === id)
     if (updatedVal) {
       return updatedVal?.additionalInfo
@@ -113,10 +113,10 @@ const Questionnaire = () => {
             <FlatList
               data={questions}
               renderItem={({ item }) => (
-                <VStack width="90%" mx="3" mb="10">
+                <ScrollView width="90%" mx="3" mb="10">
                   <Heading>{item.question}</Heading>
                   <Radio.Group
-                    defaultValue="five"
+                    defaultValue="very good"
                     name="questionnaireGroup"
                     accessibilityLabel="questionnaire group"
                     value={getRadioGroupValue(item.id)}
@@ -126,14 +126,18 @@ const Questionnaire = () => {
                     style={styles.radioButtonContainer}
                   >
                     <View style={styles.radioButton}>
-                      <Radio value="very bad" />
+                      <Radio value="very bad" accessibilityLabel="very bad" />
                       <Text>Very {'\n'}bad</Text>
                     </View>
-                    <Radio value="bad" my={1} />
-                    <Radio value="neutral" my={1} />
-                    <Radio value="good" my={1} />
+                    <Radio value="bad" accessibilityLabel="bad" my={1} />
+                    <Radio
+                      value="neutral"
+                      accessibilityLabel="neutral"
+                      my={1}
+                    />
+                    <Radio value="good" accessibilityLabel="good" my={1} />
                     <View style={styles.radioButton}>
-                      <Radio value="very good" />
+                      <Radio value="very good" accessibilityLabel="very good" />
                       <Text>Very {'\n'}good</Text>
                     </View>
                   </Radio.Group>
@@ -142,8 +146,8 @@ const Questionnaire = () => {
                       Feel free to tell us more
                     </FormControl.Label>
                     <TextArea
-                      value={getTextareapValue(item.id)}
-                      onChange={e => handleChangeTextarea(e, item)}
+                      value={getTextareaValue(item.id)}
+                      onChangeText={text => handleChangeTextarea(text, item)}
                       h={20}
                       placeholder="Anything you'd like us to know :) "
                       w={{
@@ -152,10 +156,11 @@ const Questionnaire = () => {
                       }}
                     />
                   </FormControl>
-                </VStack>
+                </ScrollView>
               )}
+              keyExtractor={item => item.id}
             />
-            <Button onPress={onSubmit} mt="5" colorScheme="cyan">
+            <Button onPress={onSubmit} mt="5" style={styles.submitButton}>
               Submit
             </Button>
           </View>
@@ -186,6 +191,13 @@ const styles = StyleSheet.create({
   },
   textAreaContainer: {
     marginTop: 20,
+  },
+  submitButton: {
+    backgroundColor: 'rgba(18, 65, 145, 1)',
+    marginBottom: 120,
+    width: '50%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 })
 

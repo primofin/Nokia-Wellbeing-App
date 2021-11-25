@@ -1,5 +1,5 @@
 import React from 'react'
-import { NativeBaseProvider, extendTheme } from 'native-base'
+import { NativeBaseProvider } from 'native-base'
 
 import theme from '../styles/theme'
 
