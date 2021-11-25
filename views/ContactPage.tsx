@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import uuid from 'react-native-uuid'
@@ -18,8 +18,8 @@ import { db } from '../environment/config'
 import ThemeProvider from '../context/ThemeProvider'
 
 const ContactPage = ({ navigation }: any) => {
-  const [value, setValue] = React.useState('phone')
-  const [formData, setData] = React.useState({
+  const [value, setValue] = useState('phone')
+  const [formData, setData] = useState<any>({
     name: '',
     phone: '',
     email: '',
@@ -29,12 +29,22 @@ const ContactPage = ({ navigation }: any) => {
   })
 
   useEffect(() => {
-    _retrieveData()
+    fetchUser()
   }, [formData.id])
 
-  const _retrieveData = async () => {
+  /**
+   * Fetch data (collection: users) from Firestore
+   */
+  const fetchUser = async () => {
     const userId = await AsyncStorage.getItem('userId')
-    console.log('userId', userId)
+    const response = db.collection('users')
+    const data = await response.get()
+    data.docs.forEach(item => {
+      const user = item.data()
+      if (user.id === userId) {
+        setData(user)
+      }
+    })
   }
 
   const onSubmit = async (e: any) => {
@@ -68,6 +78,7 @@ const ContactPage = ({ navigation }: any) => {
             <Input
               placeholder="Enter your firstname and lastname"
               onChangeText={value => setData({ ...formData, name: value })}
+              value={formData.name}
             />
           </FormControl>
           <FormControl isRequired>
@@ -75,6 +86,7 @@ const ContactPage = ({ navigation }: any) => {
             <Input
               placeholder="Enter your phone number"
               onChangeText={value => setData({ ...formData, phone: value })}
+              value={formData.phone}
             />
           </FormControl>
           <FormControl isRequired>
@@ -82,6 +94,7 @@ const ContactPage = ({ navigation }: any) => {
             <Input
               placeholder="Enter your email address"
               onChangeText={value => setData({ ...formData, email: value })}
+              value={formData.email}
             />
           </FormControl>
           <FormControl isRequired>
@@ -92,6 +105,7 @@ const ContactPage = ({ navigation }: any) => {
               onChange={(e: any) =>
                 setData({ ...formData, detailed_info: e.currentTarget.value })
               }
+              value={formData.detailed_info}
               h={20}
               placeholder="How are you doing?"
               w={{
@@ -103,11 +117,11 @@ const ContactPage = ({ navigation }: any) => {
           <Radio.Group
             name="myRadioGroup"
             accessibilityLabel="favorite number"
-            value={value}
             onChange={nextValue => {
               setValue(value)
               setData({ ...formData, contact_by: nextValue })
             }}
+            value={formData.contact_by}
           >
             <Radio value="phone" my={1}>
               By Phone

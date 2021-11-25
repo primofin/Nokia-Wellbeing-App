@@ -9,7 +9,6 @@ import {
   Text,
   TextArea,
   View,
-  VStack,
   ScrollView,
 } from 'native-base'
 
