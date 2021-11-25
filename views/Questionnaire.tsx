@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet } from 'react-native'
+import { GestureResponderEvent, StyleSheet } from 'react-native'
 import {
   Button,
   FlatList,
@@ -14,25 +14,11 @@ import {
 
 import ThemeProvider from '../context/ThemeProvider'
 import { db } from '../environment/config'
-import { Question } from '../types'
+import { Question, Answer } from '../types'
 
 const Questionnaire = () => {
-  const [questions, setQuestions] = useState<any>([
-    {
-      id: 'ad32',
-      question: 'How are you today?',
-      weight: 1,
-    },
-  ])
-  const [submitValues, setSubmitValues] = useState([
-    {
-      id: '1a',
-      question: 'How are you today?',
-      weight: 1,
-      answer: 'very good',
-      additionalInfo: 'none',
-    },
-  ])
+  const [questions, setQuestions] = useState<any | Question[]>([])
+  const [submitValues, setSubmitValues] = useState<any | Answer[]>([])
 
   /**
    * Fetch data (collection: questions) from Firestore
@@ -47,9 +33,9 @@ const Questionnaire = () => {
       setQuestions((questions: Question[]) => [...questions, question])
     })
   }
-
-  const submitAnswers = (e: any) => {
-    e.preventDefault()
+  
+  const onSubmit = (event: GestureResponderEvent) => {
+    event.preventDefault()
     db.collection('surveys')
       .add({ data: [...submitValues] })
       .then(docRef => {
@@ -60,12 +46,8 @@ const Questionnaire = () => {
       })
   }
 
-  const onSubmit = (e: any) => {
-    submitAnswers(e)
-  }
-
   const handleChangeTextarea = (e: any, question: Question) => {
-    let updatedVal = submitValues.find(val => val.id === question.id)
+    let updatedVal = submitValues.find((val: Answer) => val.id === question.id)
     if (updatedVal) {
       updatedVal = { ...updatedVal, additionalInfo: e.currentTarget.value }
       setSubmitValues([...submitValues, updatedVal])
@@ -84,7 +66,7 @@ const Questionnaire = () => {
   }
 
   const getTextareapValue = (id: string) => {
-    const updatedVal = submitValues.find(val => val.id === id)
+    const updatedVal = submitValues.find((val: Answer) => val.id === id)
     if (updatedVal) {
       return updatedVal?.additionalInfo
     }
@@ -92,7 +74,7 @@ const Questionnaire = () => {
   }
 
   const getRadioGroupValue = (id: string) => {
-    const updatedVal = submitValues.find(val => val.id === id)
+    const updatedVal = submitValues.find((val: Answer) => val.id === id)
     if (updatedVal) {
       return updatedVal?.answer
     }
@@ -100,7 +82,7 @@ const Questionnaire = () => {
   }
 
   const handleChangeRadioGroup = (value: string, question: Question) => {
-    let updatedVal = submitValues.find(val => val.id === question.id)
+    let updatedVal = submitValues.find((val: Answer) => val.id === question.id)
     if (updatedVal) {
       updatedVal = { ...updatedVal, answer: value }
       setSubmitValues([...submitValues, updatedVal])
@@ -126,54 +108,56 @@ const Questionnaire = () => {
     <ThemeProvider>
       <View style={styles.viewWrapper}>
         {questions && (
-          <FlatList
-            data={questions}
-            renderItem={({ item }) => (
-              <VStack width="90%" mx="3" mb="10">
-                <Heading>{item.question}</Heading>
-                <Radio.Group
-                  defaultValue="five"
-                  name="questionnaireGroup"
-                  accessibilityLabel="questionnaire group"
-                  value={getRadioGroupValue(item.id)}
-                  onChange={nextValue => {
-                    handleChangeRadioGroup(nextValue, item)
-                  }}
-                  style={styles.radioButtonContainer}
-                >
-                  <View style={styles.radioButton}>
-                    <Radio value="very bad" />
-                    <Text>Very {'\n'}bad</Text>
-                  </View>
-                  <Radio value="bad" my={1} />
-                  <Radio value="neutral" my={1} />
-                  <Radio value="good" my={1} />
-                  <View style={styles.radioButton}>
-                    <Radio value="very good" />
-                    <Text>Very {'\n'}good</Text>
-                  </View>
-                </Radio.Group>
-                <FormControl isRequired style={styles.textAreaContainer}>
-                  <FormControl.Label>
-                    Feel free to tell us more
-                  </FormControl.Label>
-                  <TextArea
-                    value={getTextareapValue(item.id)}
-                    onChange={e => handleChangeTextarea(e, item)}
-                    h={20}
-                    placeholder="Anything you'd like us to know :) "
-                    w={{
-                      base: '100%',
-                      md: '25%',
+          <View>
+            <FlatList
+              data={questions}
+              renderItem={({ item }) => (
+                <VStack width="90%" mx="3" mb="10">
+                  <Heading>{item.question}</Heading>
+                  <Radio.Group
+                    defaultValue="five"
+                    name="questionnaireGroup"
+                    accessibilityLabel="questionnaire group"
+                    value={getRadioGroupValue(item.id)}
+                    onChange={nextValue => {
+                      handleChangeRadioGroup(nextValue, item)
                     }}
-                  />
-                </FormControl>
-                <Button onPress={onSubmit} mt="5" colorScheme="cyan">
-                  Submit
-                </Button>
-              </VStack>
-            )}
-          />
+                    style={styles.radioButtonContainer}
+                  >
+                    <View style={styles.radioButton}>
+                      <Radio value="very bad" />
+                      <Text>Very {'\n'}bad</Text>
+                    </View>
+                    <Radio value="bad" my={1} />
+                    <Radio value="neutral" my={1} />
+                    <Radio value="good" my={1} />
+                    <View style={styles.radioButton}>
+                      <Radio value="very good" />
+                      <Text>Very {'\n'}good</Text>
+                    </View>
+                  </Radio.Group>
+                  <FormControl isRequired style={styles.textAreaContainer}>
+                    <FormControl.Label>
+                      Feel free to tell us more
+                    </FormControl.Label>
+                    <TextArea
+                      value={getTextareapValue(item.id)}
+                      onChange={e => handleChangeTextarea(e, item)}
+                      h={20}
+                      placeholder="Anything you'd like us to know :) "
+                      w={{
+                        base: '100%',
+                        md: '25%',
+                      }}
+                    />
+                  </FormControl>
+                </VStack>
+              )}
+            />
+            <Button onPress={onSubmit} mt="5" colorScheme="cyan">
+              Submit
+            </Button>
+          </View>
         )}
       </View>
     </ThemeProvider>
