@@ -54,6 +54,7 @@ const ContactPage = ({ navigation }: any) => {
       .add(formData)
       .then((docRef: any) => {
         console.log('submit success')
+        navigation.navigate('FormSubmitted Modal')
       })
       .catch((error: any) => {
         console.error('Error adding document: ', error)
