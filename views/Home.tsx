@@ -5,7 +5,7 @@ import { Heading, Button, Text } from 'native-base'
 import globalStyles from '../styles/global.js'
 
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation }: any) => {
   return (
     <View>
       <Heading style={globalStyles.heading}>Welcome back!</Heading>

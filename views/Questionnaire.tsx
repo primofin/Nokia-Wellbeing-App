@@ -6,6 +6,7 @@ import {
   FormControl,
   Heading,
   Radio,
+  Spinner,
   Text,
   TextArea,
   View,
@@ -33,7 +34,7 @@ const Questionnaire = () => {
       setQuestions((questions: Question[]) => [...questions, question])
     })
   }
-  
+
   const onSubmit = (event: GestureResponderEvent) => {
     event.preventDefault()
     db.collection('surveys')
@@ -107,7 +108,7 @@ const Questionnaire = () => {
   return (
     <ThemeProvider>
       <View style={styles.viewWrapper}>
-        {questions && (
+        {questions.length !== 0 ? (
           <View>
             <FlatList
               data={questions}
@@ -158,6 +159,8 @@ const Questionnaire = () => {
               Submit
             </Button>
           </View>
+        ) : (
+          <Spinner color="rgba(18, 65, 145, 1)" />
         )}
       </View>
     </ThemeProvider>
@@ -167,7 +170,7 @@ const Questionnaire = () => {
 const styles = StyleSheet.create({
   viewWrapper: {
     paddingTop: 20,
-    width: '90%',
+    width: '95%',
     marginLeft: 'auto',
     marginRight: 'auto',
   },
