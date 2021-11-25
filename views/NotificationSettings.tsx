@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native'
 import { Flex, VStack, Switch, Text } from 'native-base'
 
 import ThemeProvider from '../context/ThemeProvider'
-import globalStyles from '../styles/global'
 
 const NotificationSettings = () => {
   return (
