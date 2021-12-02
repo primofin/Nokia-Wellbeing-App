@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet } from 'react-native'
+import {
+  NativeSyntheticEvent,
+  StyleSheet,
+  TextInputChangeEventData,
+} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import uuid from 'react-native-uuid'
 import {
@@ -52,11 +56,10 @@ const ContactPage = ({ navigation }: any) => {
     await AsyncStorage.setItem('userId', formData.id)
     db.collection('users')
       .add(formData)
-      .then((docRef: any) => {
-        console.log('submit success')
+      .then(() => {
         navigation.navigate('FormSubmitted Modal')
       })
-      .catch((error: any) => {
+      .catch(error => {
         console.error('Error adding document: ', error)
       })
   }
@@ -103,9 +106,9 @@ const ContactPage = ({ navigation }: any) => {
               Feel free to tell us more
             </FormControl.Label>
             <TextArea
-              onChange={(e: any) =>
-                setData({ ...formData, detailed_info: e.currentTarget.value })
-              }
+              onChangeText={(message: string) => {
+                setData({ ...formData, detailed_info: message })
+              }}
               value={formData.detailed_info}
               h={20}
               placeholder="How are you doing?"
