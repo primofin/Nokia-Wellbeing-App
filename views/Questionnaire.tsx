@@ -49,7 +49,8 @@ const Questionnaire = () => {
     let updatedVal = submitValues.find((val: Answer) => val.id === question.id)
     if (updatedVal) {
       updatedVal = { ...updatedVal, additionalInfo: text }
-      setSubmitValues([...submitValues, updatedVal])
+      // setSubmnitValues(submitValues.map(value => value.id === question.id ? updateValue : value))
+      setSubmitValues([...submitValues, updatedVal])//maybe exist duplicate value
     } else {
       setSubmitValues([
         ...submitValues,
@@ -106,13 +107,13 @@ const Questionnaire = () => {
 
   return (
     <ThemeProvider>
-      <View style={styles.viewWrapper}>
+      <ScrollView style={styles.viewWrapper}>
         {questions.length !== 0 ? (
           <View>
             <FlatList
               data={questions}
               renderItem={({ item }) => (
-                <ScrollView width="90%" mx="3" mb="10">
+                <View width="90%" mx="3" mb="10">
                   <Heading>{item.question}</Heading>
                   <Radio.Group
                     defaultValue="very good"
@@ -155,7 +156,7 @@ const Questionnaire = () => {
                       }}
                     />
                   </FormControl>
-                </ScrollView>
+                </View>
               )}
               keyExtractor={item => item.id}
             />
@@ -166,7 +167,7 @@ const Questionnaire = () => {
         ) : (
           <Spinner color="rgba(18, 65, 145, 1)" />
         )}
-      </View>
+      </ScrollView>
     </ThemeProvider>
   )
 }

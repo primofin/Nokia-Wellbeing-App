@@ -44,9 +44,12 @@ const ContactPage = ({ navigation }: any) => {
       if (user.id === userId) {
         setData(user)
       }
-    })
+    }) 
   }
 
+
+  // state variable isSubmitting, setIsSubmitting.Then in onSubmit add an if (!isSubmitting) { db.collection....then(() => setIsSubmitting(false)) }
+  // should debounce when submitting (check if it's submitting)
   const onSubmit = async (e: any) => {
     e.preventDefault()
     await AsyncStorage.setItem('userId', formData.id)
