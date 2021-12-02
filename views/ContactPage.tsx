@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  NativeSyntheticEvent,
-  StyleSheet,
-  TextInputChangeEventData,
-} from 'react-native'
+import { GestureResponderEvent, StyleSheet } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import uuid from 'react-native-uuid'
 import {
@@ -51,12 +47,15 @@ const ContactPage = ({ navigation }: any) => {
     })
   }
 
-  const onSubmit = async (e: any) => {
-    e.preventDefault()
-    await AsyncStorage.setItem('userId', formData.id)
+  const onSubmit = async (event: GestureResponderEvent) => {
+    event.preventDefault()
+    // const userIdFromStorage = await AsyncStorage.getItem('userId')
+    // const userId = formData.id
     db.collection('users')
       .add(formData)
       .then(() => {
+        AsyncStorage.clear()
+        AsyncStorage.setItem('userId', formData.id)
         navigation.navigate('FormSubmitted Modal')
       })
       .catch(error => {
