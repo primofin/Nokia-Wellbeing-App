@@ -71,7 +71,6 @@ const Questionnaire = ({ navigation }: any) => {
     }
   }
 
-  console.log('question', questions)
   const getTextareaValue = (id: string) => {
     const updatedVal = submitValues.find((val: Answer) => val.id === id)
     if (updatedVal) {

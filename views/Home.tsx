@@ -8,7 +8,7 @@ import globalStyles from '../styles/global.js'
 const Home = ({ navigation }: any) => {
   return (
     <View>
-      <Heading style={globalStyles.heading}>Welcome back!</Heading>
+      <Heading style={globalStyles.heading}>Welcome !</Heading>
       <Button style={globalStyles.button} onPress={() => {
         navigation.navigate('Questionnaire')
       }}>
