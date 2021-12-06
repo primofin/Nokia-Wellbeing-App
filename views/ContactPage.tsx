@@ -25,6 +25,7 @@ const ContactPage = ({ navigation }: any) => {
     email: '',
     detailed_info: '',
     contact_by: value,
+    docId: '',
     id: uuid.v4() as string,
   })
 
@@ -40,8 +41,9 @@ const ContactPage = ({ navigation }: any) => {
     const response = db.collection('users')
     const data = await response.get()
     data.docs.forEach(item => {
-      const user = item.data()
+      let user = item.data()
       if (user.id === userId) {
+        user = { ...user, docId: item.id }
         setData(user)
       }
     })
@@ -49,18 +51,30 @@ const ContactPage = ({ navigation }: any) => {
 
   const onSubmit = async (event: GestureResponderEvent) => {
     event.preventDefault()
-    // const userIdFromStorage = await AsyncStorage.getItem('userId')
-    // const userId = formData.id
-    db.collection('users')
-      .add(formData)
-      .then(() => {
-        AsyncStorage.clear()
-        AsyncStorage.setItem('userId', formData.id)
-        navigation.navigate('FormSubmitted Modal')
-      })
-      .catch(error => {
-        console.error('Error adding document: ', error)
-      })
+    const userIdFromStorage = await AsyncStorage.getItem('userId')
+    const userId = formData.id
+    if (userIdFromStorage !== userId) {
+      db.collection('users')
+        .add(formData).then(() => {
+          AsyncStorage.clear()
+          AsyncStorage.setItem('userId', formData.id)
+          navigation.navigate('FormSubmitted Modal')
+        })
+        .catch(error => {
+          console.error('Error adding document: ', error)
+        })
+    } else {
+      // update document if it exists
+      db.collection('users').doc(formData.docId)
+        .update(formData).then(() => {
+          AsyncStorage.clear()
+          AsyncStorage.setItem('userId', formData.id)
+          navigation.navigate('FormSubmitted Modal')
+        })
+        .catch(error => {
+          console.error('Error adding document: ', error)
+        })
+    }
   }
 
   return (
