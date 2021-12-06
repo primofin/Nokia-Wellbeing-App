@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { GestureResponderEvent, StyleSheet, FlatList } from 'react-native'
+import { GestureResponderEvent, StyleSheet, FlatList, SafeAreaView } from 'react-native'
 import {
   Button,
   FormControl,
@@ -26,11 +26,17 @@ const Questionnaire = () => {
   const fetchQuestions = async () => {
     const response = db.collection('questions')
     const data = await response.get()
+    const duplicateSubmitValues = [...submitValues]
+    const duplicateQuestions = [...questions]
     data.docs.forEach(item => {
       let question = item.data()
       question = { ...question, id: item.id }
-      setQuestions((questions: Question[]) => [...questions, question])
+      const transformedQuestion = { ...question, additionalInfo: "", answer: "very good" }
+      duplicateQuestions.push(question)
+      duplicateSubmitValues.push(transformedQuestion)
     })
+    setQuestions(duplicateQuestions)
+    setSubmitValues(duplicateSubmitValues)
   }
 
   const onSubmit = (event: GestureResponderEvent) => {
@@ -49,7 +55,7 @@ const Questionnaire = () => {
     let updatedVal = submitValues.find((val: Answer) => val.id === question.id)
     if (updatedVal) {
       updatedVal = { ...updatedVal, additionalInfo: text }
-      setSubmitValues([...submitValues, updatedVal])
+      setSubmitValues(submitValues.map((value: any) => value.id === question.id ? updatedVal : value))
     } else {
       setSubmitValues([
         ...submitValues,
@@ -62,9 +68,9 @@ const Questionnaire = () => {
         },
       ])
     }
-    console.log('e.currentTarget.value', text)
   }
 
+  console.log('question', questions)
   const getTextareaValue = (id: string) => {
     const updatedVal = submitValues.find((val: Answer) => val.id === id)
     if (updatedVal) {
@@ -85,7 +91,7 @@ const Questionnaire = () => {
     let updatedVal = submitValues.find((val: Answer) => val.id === question.id)
     if (updatedVal) {
       updatedVal = { ...updatedVal, answer: value }
-      setSubmitValues([...submitValues, updatedVal])
+      setSubmitValues(submitValues.map((value: Question) => value.id === question.id ? updatedVal : value))
     } else {
       setSubmitValues([
         ...submitValues,
@@ -106,9 +112,9 @@ const Questionnaire = () => {
 
   return (
     <ThemeProvider>
-      <View style={styles.viewWrapper}>
+      <SafeAreaView style={styles.viewWrapper}>
         {questions.length !== 0 ? (
-          <View>
+          <View style={styles.container}>
             <FlatList
               data={questions}
               renderItem={({ item }) => (
@@ -166,17 +172,21 @@ const Questionnaire = () => {
         ) : (
           <Spinner color="rgba(18, 65, 145, 1)" />
         )}
-      </View>
+      </SafeAreaView>
     </ThemeProvider>
   )
 }
 
 const styles = StyleSheet.create({
   viewWrapper: {
-    paddingTop: 20,
+    height: '100%',
     width: '95%',
     marginLeft: 'auto',
     marginRight: 'auto',
+  },
+  container: {
+    marginTop: 50,
+    marginBottom: 50,
   },
   radioButtonContainer: {
     display: 'flex',
@@ -193,8 +203,9 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     backgroundColor: 'rgba(18, 65, 145, 1)',
-    marginBottom: 120,
-    width: '50%',
+    width: 'auto',
+    paddingLeft: 10,
+    paddingRight: 10,
     marginLeft: 'auto',
     marginRight: 'auto',
   },
