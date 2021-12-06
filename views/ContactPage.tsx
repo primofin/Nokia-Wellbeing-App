@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { GestureResponderEvent, StyleSheet } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import uuid from 'react-native-uuid'
@@ -16,18 +16,12 @@ import {
 
 import { db } from '../environment/config'
 import ThemeProvider from '../context/ThemeProvider'
+import { UserContext } from '../context/UserContext'
 
 const ContactPage = ({ navigation }: any) => {
+  const context = useContext(UserContext)
   const [value, setValue] = useState('phone')
-  const [formData, setData] = useState<any>({
-    name: '',
-    phone: '',
-    email: '',
-    detailed_info: '',
-    contact_by: value,
-    docId: '',
-    id: uuid.v4() as string,
-  })
+  const [formData, setData] = useState<any>(context.user)
 
   useEffect(() => {
     fetchUser()
@@ -45,6 +39,7 @@ const ContactPage = ({ navigation }: any) => {
       if (user.id === userId) {
         user = { ...user, docId: item.id }
         setData(user)
+        context.setUser!(user)
       }
     })
   }

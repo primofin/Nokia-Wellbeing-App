@@ -11,3 +11,13 @@ export type Answer = {
   answer: string
   additionalInfo: string
 }
+
+export type User = {
+  name: string
+  phone: number
+  email: string
+  detailed_info: string
+  contact_by: 'phone' | 'email'
+  docId?: string
+  id: string
+}
