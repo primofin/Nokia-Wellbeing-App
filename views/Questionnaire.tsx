@@ -42,7 +42,7 @@ const Questionnaire = ({ navigation }: any) => {
   const onSubmit = (event: GestureResponderEvent) => {
     event.preventDefault()
     db.collection('surveys')
-      .add({ data: [...submitValues] })
+      .add({ data: [...submitValues], submitTime: new Date(Date.now()) })
       .then(docRef => {
         console.log('submit success')
         navigation.navigate('Questionnaire Submitted Modal')
