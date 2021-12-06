@@ -1,14 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View } from 'react-native'
 import { Heading, Button, Text } from 'native-base'
 
 import globalStyles from '../styles/global.js'
+import { UserContext } from '../context/UserContext'
 
 
 const Home = ({ navigation }: any) => {
+  const context = useContext(UserContext)
+  const username = context.user.name
+
   return (
     <View>
-      <Heading style={globalStyles.heading}>Welcome !</Heading>
+      <Heading style={globalStyles.heading}>{username ? `Welcome back, ${username}!` : 'Welcome to Wellco!'}</Heading>
       <Button style={globalStyles.button} onPress={() => {
         navigation.navigate('Questionnaire')
       }}>

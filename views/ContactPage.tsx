@@ -53,6 +53,7 @@ const ContactPage = ({ navigation }: any) => {
         .add(formData).then(() => {
           AsyncStorage.clear()
           AsyncStorage.setItem('userId', formData.id)
+          context.setUser!(formData)
           navigation.navigate('FormSubmitted Modal')
         })
         .catch(error => {
@@ -64,6 +65,7 @@ const ContactPage = ({ navigation }: any) => {
         .update(formData).then(() => {
           AsyncStorage.clear()
           AsyncStorage.setItem('userId', formData.id)
+          context.setUser!(formData)
           navigation.navigate('FormSubmitted Modal')
         })
         .catch(error => {
