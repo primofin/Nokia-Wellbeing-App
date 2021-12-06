@@ -9,6 +9,7 @@ import FormSubmittedModal from '../modals/FormSubmittedModal'
 import NotificationSettings from '../views/NotificationSettings'
 import PersonalPage from '../views/PersonalPage'
 import Questionnaire from '../views/Questionnaire'
+import QuestionnaireSubmitModal from '../modals/QuestionnaireSubmitForm'
 
 const Stack = createNativeStackNavigator()
 
@@ -26,6 +27,8 @@ function Navigator() {
         <Stack.Screen name="CloseForm Modal" options={{ title: '' }} component={CloseFormModal} />
         <Stack.Screen name="FormSubmitted Modal" options={{ title: '' }}
           component={FormSubmittedModal} />
+        <Stack.Screen name="Questionnaire Submitted Modal" options={{ title: '' }}
+          component={QuestionnaireSubmitModal} />
       </Stack.Group>
     </Stack.Navigator>
   </NavigationContainer>

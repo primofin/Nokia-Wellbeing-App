@@ -16,7 +16,7 @@ import ThemeProvider from '../context/ThemeProvider'
 import { db } from '../environment/config'
 import { Question, Answer } from '../types'
 
-const Questionnaire = () => {
+const Questionnaire = ({ navigation }: any) => {
   const [questions, setQuestions] = useState<any | Question[]>([])
   const [submitValues, setSubmitValues] = useState<any | Answer[]>([])
 
@@ -45,6 +45,7 @@ const Questionnaire = () => {
       .add({ data: [...submitValues] })
       .then(docRef => {
         console.log('submit success')
+        navigation.navigate('Questionnaire Submitted Modal')
       })
       .catch(error => {
         console.error('Error adding document: ', error)

@@ -8,12 +8,12 @@ import {
 
 import ThemeProvider from '../context/ThemeProvider'
 
-const FormSubmittedModal = ({ navigation }) => {
+const QuestionnaireSubmitModal = ({ navigation }) => {
   return (
     <ThemeProvider>
       <View style={styles.wrapper}>
         <Text bold fontSize="3xl">Thank you! {'\n'}
-          We will contact you as soon as possible.</Text>
+          Your submission has been sent</Text>
         <Button style={styles.back_button} size="sm" bg="primary.600" onPress={() => {
           navigation.navigate('Home')
         }}>Home Page</Button>
@@ -41,4 +41,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default FormSubmittedModal
+export default QuestionnaireSubmitModal
