@@ -16,7 +16,7 @@ import ThemeProvider from '../context/ThemeProvider'
 import { db } from '../environment/config'
 import { Question, Answer } from '../types'
 
-const Questionnaire = ({ navigation }: any) => {
+const PhysicalQuestionnaire = ({ navigation }: any) => {
   const [questions, setQuestions] = useState<any | Question[]>([])
   const [submitValues, setSubmitValues] = useState<any | Answer[]>([])
 
@@ -24,14 +24,14 @@ const Questionnaire = ({ navigation }: any) => {
    * Fetch data (collection: questions) from Firestore
    */
   const fetchQuestions = async () => {
-    const response = db.collection('questions')
+    const response = db.collection('social-questions')
     const data = await response.get()
     const duplicateSubmitValues = [...submitValues]
     const duplicateQuestions = [...questions]
     data.docs.forEach(item => {
       let question = item.data()
       question = { ...question, id: item.id }
-      const transformedQuestion = { ...question, additionalInfo: "", answer: "very good" }
+      const transformedQuestion = { ...question, additionalInfo: "", answer: "Yes" }
       duplicateQuestions.push(question)
       duplicateSubmitValues.push(transformedQuestion)
     })
@@ -41,7 +41,7 @@ const Questionnaire = ({ navigation }: any) => {
 
   const onSubmit = (event: GestureResponderEvent) => {
     event.preventDefault()
-    db.collection('surveys')
+    db.collection('social-surveys')
       .add({ data: [...submitValues], submitTime: new Date(Date.now()) })
       .then(docRef => {
         console.log('submit success')
@@ -64,7 +64,7 @@ const Questionnaire = ({ navigation }: any) => {
           id: question.id,
           question: question.question,
           weight: question.weight,
-          answer: 'Very good',
+          answer: 'Yes',
           additionalInfo: text,
         },
       ])
@@ -84,7 +84,7 @@ const Questionnaire = ({ navigation }: any) => {
     if (updatedVal) {
       return updatedVal?.answer
     }
-    return 'very good'
+    return 'Yes'
   }
 
   const handleChangeRadioGroup = (value: string, question: Question) => {
@@ -131,19 +131,12 @@ const Questionnaire = ({ navigation }: any) => {
                     style={styles.radioButtonContainer}
                   >
                     <View style={styles.radioButton}>
-                      <Radio value="very bad" accessibilityLabel="very bad" />
-                      <Text>Very {'\n'}bad</Text>
+                      <Radio value="Yes" accessibilityLabel="Yes" />
+                      <Text>Yes</Text>
                     </View>
-                    <Radio value="bad" accessibilityLabel="bad" my={1} />
-                    <Radio
-                      value="neutral"
-                      accessibilityLabel="neutral"
-                      my={1}
-                    />
-                    <Radio value="good" accessibilityLabel="good" my={1} />
                     <View style={styles.radioButton}>
-                      <Radio value="very good" accessibilityLabel="very good" />
-                      <Text>Very {'\n'}good</Text>
+                      <Radio value="No" accessibilityLabel="No" />
+                      <Text>No</Text>
                     </View>
                   </Radio.Group>
                   <FormControl isRequired style={styles.textAreaContainer}>
@@ -193,6 +186,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
+    width: 100,
+    marginRight: 'auto',
   },
   radioButton: {
     display: 'flex',
@@ -211,4 +206,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Questionnaire
+export default PhysicalQuestionnaire

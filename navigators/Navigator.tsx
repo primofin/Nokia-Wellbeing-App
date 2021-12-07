@@ -8,8 +8,12 @@ import CloseFormModal from '../modals/CloseFormModal'
 import FormSubmittedModal from '../modals/FormSubmittedModal'
 import NotificationSettings from '../views/NotificationSettings'
 import PersonalPage from '../views/PersonalPage'
-import Questionnaire from '../views/Questionnaire'
+import MentalQuestionnaire from '../views/MentalQuestionnaire'
 import QuestionnaireSubmitModal from '../modals/QuestionnaireSubmitForm'
+import SurveyList from '../views/SurveyList'
+import SocialQuestionnaire from '../views/SocialQuestionnaire'
+import PhysicalQuestionnaire from '../views/PhysicalQuestionnaire'
+
 
 const Stack = createNativeStackNavigator()
 
@@ -18,10 +22,13 @@ function Navigator() {
     <Stack.Navigator>
       <Stack.Group>
         <Stack.Screen name="Home" options={{ title: '' }} component={Home} />
-        <Stack.Screen name="Questionnaire" component={Questionnaire} />
+        <Stack.Screen name="Mental Questionnaire" component={MentalQuestionnaire} />
+        <Stack.Screen name="Social Questionnaire" component={SocialQuestionnaire} />
+        <Stack.Screen name="Physical Questionnaire" component={PhysicalQuestionnaire} />
         <Stack.Screen name="Contact Page" component={ContactPage} />
         <Stack.Screen name="My Wellbeing" options={{ title: 'My Well-being' }} component={PersonalPage} />
         <Stack.Screen name="Notifications" component={NotificationSettings} />
+        <Stack.Screen name="Questionnaire List" component={SurveyList} />
       </Stack.Group>
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="CloseForm Modal" options={{ title: '' }} component={CloseFormModal} />

@@ -14,7 +14,7 @@ const Home = ({ navigation }: any) => {
     <View>
       <Heading style={globalStyles.heading}>{username ? `Welcome back, ${username}!` : 'Welcome to Wellco!'}</Heading>
       <Button style={globalStyles.button} onPress={() => {
-        navigation.navigate('Questionnaire')
+        navigation.navigate('Questionnaire List')
       }}>
         <Text style={globalStyles.mainBtnText}>Well-being Questionnaire</Text>
         <Text style={globalStyles.mainBtnTextSmall}>How are you feeling today?</Text>
